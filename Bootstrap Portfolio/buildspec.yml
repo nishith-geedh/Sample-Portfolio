@@ -20,7 +20,7 @@ phases:
 artifacts:
   files:
     - '**/*'
-  base-directory: Bootstrap Portfolio
+  base-directory: output
 cache:
   paths:
     - '**/*'
