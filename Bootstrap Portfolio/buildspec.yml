@@ -9,16 +9,16 @@ phases:
       - echo Build started on $(date)
       - echo "Copying Bootstrap files to the output directory..."
       - mkdir -p output
-      - cp -R * output/ # Assuming the current directory contains the Bootstrap project files
+      - rsync -av --exclude=output ./ output/ 
   post_build:
     commands:
       - echo "Packaging the application for artifacts..."
-      - zip -r output/demo-app.zip output/
+      - zip -r output/application.zip output/
 artifacts:
   files:
-    - output/demo-app.zip
-    - output/
+    - '**/*'
   base-directory: output
 cache:
   paths:
     - '**/*'
+
