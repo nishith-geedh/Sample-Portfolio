@@ -9,17 +9,19 @@ phases:
   build:
     commands:
       - echo Building project...
-      - echo "No build step required for static Bootstrap projects"
+      - echo "No build step required for static Bootstrap projects."
   post_build:
     commands:
       - echo Post-build phase...
-      - echo "Packaging static files..."
+      - echo "Packaging static files into a zip archive..."
       - mkdir -p output
-      - rsync -av --exclude=output ./ output/
+      - zip -r output/project.zip . -x output/\* # Create a zip file excluding the output directory
 artifacts:
   files:
-    - '**/*'
-  base-directory: output
+    - output/project.zip # Include only the zip file as the artifact
+  discard-paths: yes # Ensure no folder structure is included in the artifact
 cache:
   paths:
-    - '**/*'
+    - '*.css'
+    - '*.js'
+    - '*.html'
