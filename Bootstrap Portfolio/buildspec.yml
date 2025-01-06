@@ -1,27 +1,23 @@
-version: 0.2
+  version: 0.2
 
-phases:
-  install:
-    runtime-versions:
-      nodejs: 18
-    commands:
-      - echo "No dependencies to install."
-  build:
-    commands:
-      - echo Building project...
-      - echo "No build step required for static Bootstrap projects."
-  post_build:
-    commands:
-      - echo Post-build phase...
-      - echo "Packaging static files into a zip archive..."
-      - mkdir -p output
-      - zip -r output/project.zip . -x output/\* # Create a zip file excluding the output directory
-artifacts:
-  files:
-    - output/project.zip # Include only the zip file as the artifact
-  discard-paths: yes # Ensure no folder structure is included in the artifact
-cache:
-  paths:
-    - '*.css'
-    - '*.js'
-    - '*.html'
+  phases:
+    install:
+      commands:
+        - echo "No dependencies to install."
+    build:
+      commands:
+        - echo Building project...
+        - echo "No build step required for static Bootstrap projects"
+    post_build:
+      commands:
+        - echo Post-build phase...
+        - echo Packaging static files...
+        - mkdir -p output
+        - rsync -av --exclude=output ./ output/
+  artifacts:
+    files:
+      - '**/*'
+    base-directory: output
+  cache:
+    paths:
+      - '**/*'
