@@ -2,18 +2,20 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 18
     commands:
-      - echo "No dependencies to install for Bootstrap project."
+      - echo "No dependencies to install."
   build:
     commands:
-      - echo Build started on $(date)
-      - echo "Copying Bootstrap files to the output directory..."
-      - mkdir -p output
-      - rsync -av --exclude=output ./ output/ 
+      - echo Building project...
+      - echo "No build step required for static Bootstrap projects"
   post_build:
     commands:
-      - echo "Packaging the application for artifacts..."
-      - zip -r output/application.zip output/
+      - echo Post-build phase...
+      - echo "Packaging static files..."
+      - mkdir -p output
+      - rsync -av --exclude=output ./ output/
 artifacts:
   files:
     - '**/*'
@@ -21,4 +23,3 @@ artifacts:
 cache:
   paths:
     - '**/*'
-
