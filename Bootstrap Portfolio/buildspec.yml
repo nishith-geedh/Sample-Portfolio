@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo Installing dependencies...
+      - npm install -g aws-cli # Install AWS CLI for deployment (if needed)
+  build:
+    commands:
+      - echo Building project...
+      - echo "No build step required for static Bootstrap projects"
+  post_build:
+    commands:
+      - echo Post-build phase...
+      - echo Packaging static files...
+      - mkdir -p output
+      - cp -R . output/
+artifacts:
+  files:
+    - '**/*'
+  base-directory: Bootstrap Portfolio
+cache:
+  paths:
+    - '**/*'
