@@ -20,7 +20,7 @@ phases:
       - rsync -av --exclude=output ./ output/
       # Create a zip file of the output directory
       - zip -r my-application-output.zip output/
-      - echo "Zip file created: my-application-output.zip"
+      - echo "Zip file created my-application-output.zip"
 
 artifacts:
   files:
