@@ -2,8 +2,6 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      nodejs: 18
     commands:
       - echo "No dependencies to install."
 
@@ -16,18 +14,28 @@ phases:
     commands:
       - echo "Post-build phase..."
       - echo "Packaging static files..."
+      # Ensure output folder exists and is populated
       - mkdir -p output
       - rsync -av --exclude=output ./ output/
-      # Create a zip file of the output directory
-      - zip -r my-application-output.zip output/
-      - echo "Zip file created my-application-output.zip"
+
+      # Create application.zip: Include appspec.yml and other files at the root level, but exclude the output folder
+      - zip -r application.zip . -x "output/*"
+      - echo "application.zip created."
+
+      # Create artifact.zip: Include appspec.yml and other files at the root level, but exclude the output folder
+      - zip -r artifact.zip . -x "output/*"
+      - echo "artifact.zip created."
 
 artifacts:
   files:
-    - '**/*'  # Include any scripts needed for deployment (like install_nginx.sh, start_nginx.sh)
-  base-directory: output  # Ensure the contents of the output folder are included
-  discard-paths: yes  # Flatten the directory structure in the zip file
+    - application.zip            # Contains appspec.yml and project files
+    - artifact.zip               # Contains appspec.yml and project files
+    - output/**/*                # Include the output folder (uncompressed)
+    - appspec.yml                # Ensure appspec.yml is separately available
+    - scripts/**/*               # Include any scripts for deployment
+  base-directory: .               # Ensures that everything from the current directory is considered
+  discard-paths: yes              # Flatten the directory structure in the artifact zips
 
 cache:
   paths:
-    - '**/*'  # Optional: Cache all files to speed up future builds (useful for dependencies)
+    - '**/*'                      # Optional: Cache all files to speed up future builds
