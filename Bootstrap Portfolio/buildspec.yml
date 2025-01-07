@@ -6,20 +6,30 @@ phases:
       nodejs: 18
     commands:
       - echo "No dependencies to install."
+
   build:
     commands:
-      - echo Building project...
+      - echo "Building project..."
       - echo "No build step required for static Bootstrap projects"
+
   post_build:
     commands:
-      - echo Post-build phase...
+      - echo "Post-build phase..."
       - echo "Packaging static files..."
       - mkdir -p output
       - rsync -av --exclude=output ./ output/
+      # Create a zip file of the output directory
+      - zip -r my-application-output.zip output/
+      - echo "Zip file created: my-application-output.zip"
+
 artifacts:
   files:
-    - '**/*'
-  base-directory: output
+    - my-application-output.zip
+    - appspec.yml
+    - scripts/**/*  # Include any scripts needed for deployment (like install_nginx.sh, start_nginx.sh)
+  base-directory: output  # Ensure the contents of the output folder are included
+  discard-paths: yes  # Flatten the directory structure in the zip file
+
 cache:
   paths:
-    - '**/*'
+    - '**/*'  # Optional: Cache all files to speed up future builds (useful for dependencies)
