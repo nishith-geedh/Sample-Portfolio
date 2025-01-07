@@ -24,9 +24,7 @@ phases:
 
 artifacts:
   files:
-    - my-application-output.zip
-    - appspec.yml
-    - scripts/**/*  # Include any scripts needed for deployment (like install_nginx.sh, start_nginx.sh)
+    - '**/*'  # Include any scripts needed for deployment (like install_nginx.sh, start_nginx.sh)
   base-directory: output  # Ensure the contents of the output folder are included
   discard-paths: yes  # Flatten the directory structure in the zip file
 
