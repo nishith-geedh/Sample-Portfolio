@@ -1,0 +1,41 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "No dependencies to install."
+
+  build:
+    commands:
+      - echo "Building project..."
+      - echo "No build step required for static Bootstrap projects"
+
+  post_build:
+    commands:
+      - echo "Post-build phase..."
+      - echo "Packaging static files..."
+      # Ensure output folder exists and is populated
+      - mkdir -p output
+      - rsync -av --exclude=output ./ output/
+
+      # Create application.zip: Include appspec.yml and other files at the root level, but exclude the output folder
+      - zip -r application.zip . -x "output/*"
+      - echo "application.zip created."
+
+      # Create artifact.zip: Include appspec.yml and other files at the root level, but exclude the output folder
+      - zip -r artifact.zip . -x "output/*"
+      - echo "artifact.zip created."
+
+artifacts:
+  files:
+    - application.zip            # Contains appspec.yml and project files
+    - artifact.zip               # Contains appspec.yml and project files
+    - output/**/*                # Include the output folder (uncompressed)
+    - appspec.yml                # Ensure appspec.yml is separately available
+    - scripts/**/*               # Include any scripts for deployment
+  base-directory: .               # Ensures that everything from the current directory is considered
+  discard-paths: yes              # Flatten the directory structure in the artifact zips
+
+cache:
+  paths:
+    - '**/*'                      # Optional: Cache all files to speed up future builds
